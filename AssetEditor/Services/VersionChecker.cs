@@ -19,7 +19,8 @@ namespace AssetEditor.Services
             try
             {
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                // FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(AppContext.BaseDirectory);
 
                 var currentVersion = "v" + fvi.FileMajorPart + "." + fvi.FileMinorPart;
                 GitHubClient client = new GitHubClient(new ProductHeaderValue("AssetEditor_instance"));
