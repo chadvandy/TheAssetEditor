@@ -20,7 +20,7 @@ namespace AssetEditor.Views
 
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             // var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(AppContext.BaseDirectory);
+            var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Environment.ProcessPath);
 
             Title = $"AssetEditor v{fvi.FileMajorPart}.{fvi.FileMinorPart}";
         }
