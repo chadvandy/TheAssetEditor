@@ -61,8 +61,8 @@ namespace View3D.Services
 
                 var materialTemplate = game switch
                 {
-                    GameTypeEnum.Warhammer3 => LoadMaterialTemplate("View3D.Content.Game.MaterialTemplate_wh3.xml.material"),
-                    GameTypeEnum.Warhammer2 => LoadMaterialTemplate("View3D.Content.Game.MaterialTemplate_wh2.xml.material"),
+                    GameTypeEnum.Warhammer3 => LoadMaterialTemplate("View3D.Content.Game.Warhammer3.MaterialTemplate.txt"),
+                    GameTypeEnum.Warhammer2 => LoadMaterialTemplate("View3D.Content.Game.Warhammer2.MaterialTemplate.txt"),
                     _ => throw new Exception("Unkown game - unable to generate ws model")
                 };
 
