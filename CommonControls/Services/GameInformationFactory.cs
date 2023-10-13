@@ -18,7 +18,8 @@ namespace CommonControls.Services
         Warhammer1,
         Warhammer2,
         Warhammer3,
-        Troy
+        Troy,
+        Pharaoh
     }
 
     public class GameInformation
@@ -34,6 +35,7 @@ namespace CommonControls.Services
         public GameInformation Warhammer { get; private set; }
         public GameInformation Warhammer2 { get; private set; }
         public GameInformation Warhammer3 { get; private set; }
+        public GameInformation Pharaoh { get; private set; }
         public GameInformation Troy { get; private set; }
         public GameInformation ThreeKingdoms { get; private set; }
         public GameInformation Rome2Remastered { get; private set; }
@@ -45,11 +47,12 @@ namespace CommonControls.Services
             Warhammer = new GameInformation() { Type = GameTypeEnum.Warhammer1, DisplayName = "Warhammer", DefaultPackType = "PFH4", ShortID = "warhammer" };
             Warhammer2 = new GameInformation() { Type = GameTypeEnum.Warhammer2, DisplayName = "Warhammer II", DefaultPackType = "PFH5", ShortID = "warhammer2" };
             Warhammer3 = new GameInformation() { Type = GameTypeEnum.Warhammer3, DisplayName = "Warhammer III", DefaultPackType = "PFH5", ShortID = "warhammer3" };
+            Pharaoh = new GameInformation() { Type = GameTypeEnum.Pharaoh, DisplayName = "Pharaoh", DefaultPackType = "PFH5", ShortID = "pharaoh" };
             Troy = new GameInformation() { Type = GameTypeEnum.Troy, DisplayName = "Troy", DefaultPackType = "PFH5", ShortID = "troy" };
             ThreeKingdoms = new GameInformation() { Type = GameTypeEnum.ThreeKingdoms, DisplayName = "Three Kingdoms", DefaultPackType = "PFH5", ShortID = "ThreeKingdoms" };
-            Rome2Remastered = new GameInformation() { Type = GameTypeEnum.Rome_2_Remastered, DisplayName = "Rome II - Re", DefaultPackType = "PFH5", ShortID = "Rome2Remastered" };
+            Rome2Remastered = new GameInformation() { Type = GameTypeEnum.Rome_2_Remastered, DisplayName = "Rome II - Remastered", DefaultPackType = "PFH5", ShortID = "Rome2Remastered" };
             Attilla = new GameInformation() { Type = GameTypeEnum.Attila, DisplayName = "Attila", DefaultPackType = "PFH5", ShortID = "Attila" };
-            Games = new List<GameInformation>() { Warhammer, Warhammer2, Warhammer3, Troy, ThreeKingdoms, Rome2Remastered, Attilla };
+            Games = new List<GameInformation>() { Warhammer, Warhammer2, Warhammer3, Pharaoh, Troy, ThreeKingdoms, Rome2Remastered, Attilla };
         }
 
         public GameInformation GetGameById(GameTypeEnum type)

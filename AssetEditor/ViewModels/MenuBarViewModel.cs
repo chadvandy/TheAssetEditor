@@ -220,9 +220,12 @@ namespace AssetEditor.ViewModels
 
         void ShowSettingsDialog()
         {
-            var window = _serviceProvider.GetRequiredService<SettingsWindow>();
-            window.DataContext = _serviceProvider.GetRequiredService<SettingsViewModel>();
-            window.ShowDialog();
+            SettingsWindow settingsWindow = new SettingsWindow
+            {
+                //var window = _serviceProvider.GetRequiredService<SettingsWindow>();
+                DataContext = _serviceProvider.GetRequiredService<SettingsViewModel>()
+            };
+            settingsWindow.ShowDialog();
         }
 
         void CreatePackFile()
