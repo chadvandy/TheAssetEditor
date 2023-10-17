@@ -37,8 +37,9 @@ namespace CommonControls.Services
         {
             try
             {
-                var caPacksLoaded = Database.PackFiles.Count(x => x.IsCaPackFile);
-                if (caPacksLoaded == 0 && allowLoadWithoutCaPackFiles != true)
+                //var caPacksLoaded = Database.PackFiles.Count(x => x.IsCaPackFile);
+                bool caPacksLoaded = Database.VanillaPackFile != null;
+                if (caPacksLoaded == false && allowLoadWithoutCaPackFiles != true)
                 {
                     MessageBox.Show("You are trying to load a packfile before loading CA packfile. Most editors EXPECT the CA packfiles to be loaded and will cause issues if they are not.\nFile not loaded!", "Error");
 
@@ -235,9 +236,10 @@ namespace CommonControls.Services
         {
             if (container == null)
             {
+                var res = "";
                 foreach (var pf in Database.PackFiles)
                 {
-                    var res = pf.FileList.FirstOrDefault(x => x.Value == file).Key;
+                    res = pf.FileList.FirstOrDefault(x => x.Value == file).Key;
                     if (string.IsNullOrWhiteSpace(res) == false)
                         return res;
                 }
@@ -293,7 +295,7 @@ namespace CommonControls.Services
                     }
                 }
 
-                PackFileContainer caPackFileContainer = new PackFileContainer("All CA packs - " + gameName);
+                var caPackFileContainer = new PackFileContainer("All CA packs - " + gameName);
                 caPackFileContainer.IsCaPackFile = true;
                 var packFilesOrderedByGroup = packList
                     .GroupBy(x => x.Header.LoadOrder)
@@ -305,8 +307,8 @@ namespace CommonControls.Services
                     foreach (var packfile in packFilesOrderedByName)
                         caPackFileContainer.MergePackFileContainer(packfile);
                 }
-
-                Database.AddPackFile(caPackFileContainer);
+                Database.VanillaPackFile = caPackFileContainer;
+                //Database.AddPackFile(caPackFileContainer);
 
             }
             catch (Exception e)
@@ -541,7 +543,7 @@ namespace CommonControls.Services
             _skeletonAnimationLookUpHelper.LoadFromPackFileContainer(this, pf);
         }
 
-        public void RenameDirectory(PackFileContainer pf, TreeNode node, string newName)
+        public void RenameDirectory(PackFileContainer pf, PackFileTreeNode node, string newName)
         {
             if (pf.IsCaPackFile)
                 throw new Exception("Can not rename in ca pack file");

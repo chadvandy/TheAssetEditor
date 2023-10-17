@@ -5,8 +5,6 @@ using KitbasherEditor.Services;
 using KitbasherEditor.ViewModels.MenuBarViews;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows.Shapes;
 
 namespace KitbasherEditor.ViewModels.UiCommands
 {

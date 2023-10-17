@@ -18,7 +18,7 @@ namespace CommonControls.PackFileBrowser
         File
     }
 
-    public class TreeNode : NotifyPropertyChangedImpl
+    public class PackFileTreeNode : NotifyPropertyChangedImpl
     {
         public PackFileContainer FileOwner { get; set; }
         public PackFile Item { get; set; }
@@ -34,8 +34,8 @@ namespace CommonControls.PackFileBrowser
         }
 
         public NodeType NodeType { get; set; }
-        public TreeNode Parent { get; set; }
-        public ObservableCollection<TreeNode> Children { get; set; } = new ObservableCollection<TreeNode>();
+        public PackFileTreeNode Parent { get; set; }
+        public ObservableCollection<PackFileTreeNode> Children { get; set; } = new ObservableCollection<PackFileTreeNode>();
 
         bool _unsavedChanged;
         public bool UnsavedChanged { get => _unsavedChanged; set => SetAndNotify(ref _unsavedChanged, value); }
@@ -48,7 +48,7 @@ namespace CommonControls.PackFileBrowser
 
         string _name = "";
         public string Name { get => _name; set => SetAndNotify(ref _name, value); }
-        public TreeNode(string name, NodeType type, PackFileContainer ower, TreeNode parent, PackFile packFile = null)
+        public PackFileTreeNode(string name, NodeType type, PackFileContainer ower, PackFileTreeNode parent, PackFile packFile = null)
         {
             Name = name;
             NodeType = type;
@@ -85,14 +85,14 @@ namespace CommonControls.PackFileBrowser
         }
 
 
-        public List<TreeNode> GetAllChildFileNodes()
+        public List<PackFileTreeNode> GetAllChildFileNodes()
         {
-            var output = new List<TreeNode>();
+            var output = new List<PackFileTreeNode>();
 
-            var nodes = new Stack<TreeNode>(new[] { this });
+            var nodes = new Stack<PackFileTreeNode>(new[] { this });
             while (nodes.Any())
             {
-                TreeNode node = nodes.Pop();
+                PackFileTreeNode node = nodes.Pop();
                 if (node.NodeType == NodeType.File)
                     output.Add(node);
 
@@ -113,7 +113,7 @@ namespace CommonControls.PackFileBrowser
             Parent = null;
         }
 
-        public void ForeachNode(Action<TreeNode> func)
+        public void ForeachNode(Action<PackFileTreeNode> func)
         {
             func.Invoke(this);
             foreach (var child in Children)

@@ -9,12 +9,12 @@ using CommonControls.Resources;
 
 namespace CommonControls.PackFileBrowser
 {
-    [ValueConversion(typeof(TreeNode), typeof(BitmapImage))]
+    [ValueConversion(typeof(PackFileTreeNode), typeof(BitmapImage))]
     public class PackFileToImageValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is TreeNode node)
+            if (value is PackFileTreeNode node)
             {
                 if (node.NodeType == NodeType.Root)
                     return ResourceController.CollectionIcon;

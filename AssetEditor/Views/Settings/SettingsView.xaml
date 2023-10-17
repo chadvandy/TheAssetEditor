@@ -13,6 +13,11 @@
                 <x:Type TypeName="gameinfo:GameTypeEnum"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <ObjectDataProvider x:Key="ThemeTypeEnums" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="gameinfo:ThemeTypeEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </UserControl.Resources>
 
     <Grid>
@@ -22,7 +27,7 @@
             <RowDefinition Height="151*"/>
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Header="Game Directories" Margin="0,0,0,260" Grid.RowSpan="3">
+        <GroupBox Grid.Row="0" Header="Game Directories" Margin="0,0,0,0">
             <ItemsControl ItemsSource="{Binding GameDirectores}">
                 <ItemsControl.ItemContainerStyle>
                     <Style TargetType="ContentPresenter">
@@ -52,7 +57,7 @@
             </ItemsControl>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Other" Margin="0,5,0,5" Grid.RowSpan="2">
+        <GroupBox Grid.Row="2" Header="Other" Margin="0,5,0,5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -68,39 +73,46 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Name="t_CurrentGame" Grid.Row="0" Grid.Column="0" Text="Current Game"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text=":"/>
-                <ComboBox  Grid.Row="0" Grid.Column="2" Width="100" Height="20"
+                <TextBlock Name="t_CurrentGame" Grid.Row="0" Grid.Column="0" Text="Current Game" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <ComboBox x:Name="cb_CurrentGame"  Grid.Row="0" Grid.Column="2" Width="100" Height="20"
                     SelectedItem="{Binding CurrentGame, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                    ItemsSource="{Binding Source={StaticResource GameTypeEnums}}"/>
+                    ItemsSource="{Binding Source={StaticResource GameTypeEnums}}" VerticalAlignment="Center"/>
+                
+                <TextBlock x:Name="t_CurrentTheme" Grid.Column="0" Text="Current Theme" VerticalAlignment="Center" Grid.Row="1"/>
+                <TextBlock x:Name="div_CurrentTheme" Grid.Column="1" Text=":" VerticalAlignment="Center" Grid.Row="1"/>
+                <ComboBox x:Name="cb_CurrentTheme" Grid.Column="2" Width="100" Height="20"
+                    SelectedItem="{Binding CurrentTheme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding Source={StaticResource ThemeTypeEnums}}" VerticalAlignment="Center" Grid.Row="1"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Use TextEditor For Unknown Files"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text=":"/>
-                <CheckBox  Grid.Row="1" Grid.Column="2" IsChecked="{Binding UseTextEditorForUnknownFiles, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Use TextEditor For Unknown Files" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <CheckBox  Grid.Row="2" Grid.Column="2" IsChecked="{Binding UseTextEditorForUnknownFiles, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Load Ca Packs By Default"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text=":"/>
-                <CheckBox  Grid.Row="2" Grid.Column="2" IsChecked="{Binding LoadCaPacksByDefault, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
-
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Skip loading wem (sound) files"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text=":"/>
-                <CheckBox  Grid.Row="3" Grid.Column="2" IsChecked="{Binding SkipLoadingWemFiles, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Load Ca Packs By Default" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <CheckBox  Grid.Row="3" Grid.Column="2" IsChecked="{Binding LoadCaPacksByDefault, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"/>
 
 
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Autogene Attachment Points for meshes"/>
-                <TextBlock Grid.Row="4" Grid.Column="1" Text=":"/>
-                <CheckBox  Grid.Row="4" Grid.Column="2" IsChecked="{Binding AutoGenerateAttachmentPointsFromMeshes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Skip loading wem (sound) files" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <CheckBox  Grid.Row="4" Grid.Column="2" IsChecked="{Binding SkipLoadingWemFiles, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Auto resolve missing textures"/>
-                <TextBlock Grid.Row="5" Grid.Column="1" Text=":"/>
-                <CheckBox  Grid.Row="5" Grid.Column="2" IsChecked="{Binding AutoResolveMissingTextures, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="Hide wh2 texture selectors if warhammer 3 is selected"/>
-                <TextBlock Grid.Row="6" Grid.Column="1" Text=":"/>
-                <CheckBox  Grid.Row="6" Grid.Column="2" IsChecked="{Binding HideWh2TextureSelectors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Autogene Attachment Points for meshes" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <CheckBox  Grid.Row="5" Grid.Column="2" IsChecked="{Binding AutoGenerateAttachmentPointsFromMeshes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Auto resolve missing textures" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <CheckBox  Grid.Row="6" Grid.Column="2" IsChecked="{Binding AutoResolveMissingTextures, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="Hide wh2 texture selectors if warhammer 3 is selected" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="7" Grid.Column="1" Text=":" VerticalAlignment="Center"/>
+                <CheckBox  Grid.Row="7" Grid.Column="2" IsChecked="{Binding HideWh2TextureSelectors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
     </Grid>

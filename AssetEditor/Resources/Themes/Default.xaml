@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Window Colours. Background, Border and TitleBar colours. -->
+    <SolidColorBrush x:Key="BackgroundColour"/>
+    <SolidColorBrush x:Key="WindowBorderColour"/>
+    <SolidColorBrush x:Key="WindowTitleColour"/>
+    <!-- Control colour themes. dont mess with em okay unless youre good at styles -->
+    <!-- Complete DarkTheme Colours -->
+    <SolidColorBrush x:Key="TransparentBrush"/>
+    <SolidColorBrush x:Key="ContainerBackground"/>
+    <SolidColorBrush x:Key="ContainerBorder"/>
+    <SolidColorBrush x:Key="ControlDefaultForeground"/>
+
+    <SolidColorBrush x:Key="ControlDarkerBackground"/>
+    <SolidColorBrush x:Key="ControlDarkerBorderBrush"/>
+    <SolidColorBrush x:Key="ControlDefaultBackground"/>
+    <SolidColorBrush x:Key="ControlDefaultBorderBrush"/>
+    <SolidColorBrush x:Key="ControlBrightDefaultBackground"/>
+    <SolidColorBrush x:Key="ControlBrightDefaultBorderBrush"/>
+    <SolidColorBrush x:Key="ControlDisabledBackground"/>
+    <SolidColorBrush x:Key="ControlDisabledBorderBrush"/>
+    <SolidColorBrush x:Key="ControlMouseOverBackground"/>
+    <SolidColorBrush x:Key="ControlMouseOverBorderBrush"/>
+    <SolidColorBrush x:Key="ControlSelectedBackground"/>
+    <SolidColorBrush x:Key="ControlSelectedBorderBrush"/>
+    <SolidColorBrush x:Key="ControlSelectedMouseOverBackground"/>
+    <SolidColorBrush x:Key="ControlSelectedMouseOverBorderBrush"/>
+    <SolidColorBrush x:Key="ControlGlythColour"/>
+    <SolidColorBrush x:Key="ControlMouseOverGlythColour"/>
+    <SolidColorBrush x:Key="ControlSelectedGlythColour"/>
+    <SolidColorBrush x:Key="ControlDisabledGlythColour"/>
+
+    <!-- Colourful theme  Colours -->
+    <SolidColorBrush x:Key="ControlPrimaryColourBackground"/>
+    <SolidColorBrush x:Key="ControlPrimaryColourBorderBrush"/>
+    <SolidColorBrush x:Key="ControlBrightPrimaryColourBackground"/>
+    <SolidColorBrush x:Key="ControlBrightPrimaryColourBorderBrush"/>
+</ResourceDictionary>

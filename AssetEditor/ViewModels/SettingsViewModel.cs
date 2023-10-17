@@ -34,6 +34,8 @@ namespace AssetEditor.ViewModels
         bool _hideWh2TextureSelectors;
         public bool HideWh2TextureSelectors { get => _hideWh2TextureSelectors; set => SetAndNotify(ref _hideWh2TextureSelectors, value); }
 
+        ThemeTypeEnum _currentTheme;
+        public ThemeTypeEnum CurrentTheme { get => _currentTheme; set => SetAndNotify(ref _currentTheme, value); }
 
         public ICommand SaveCommand { get; set; }
 
@@ -61,6 +63,7 @@ namespace AssetEditor.ViewModels
             AutoResolveMissingTextures = _settingsService.CurrentSettings.AutoResolveMissingTextures;
             SkipLoadingWemFiles = _settingsService.CurrentSettings.SkipLoadingWemFiles;
             HideWh2TextureSelectors = _settingsService.CurrentSettings.HideWh2TextureSelectors;
+            CurrentTheme = _settingsService.CurrentSettings.CurrentTheme;
 
             SaveCommand = new RelayCommand(OnSave);
         }
@@ -74,6 +77,7 @@ namespace AssetEditor.ViewModels
             _settingsService.CurrentSettings.AutoResolveMissingTextures = AutoResolveMissingTextures;
             _settingsService.CurrentSettings.AutoGenerateAttachmentPointsFromMeshes = AutoGenerateAttachmentPointsFromMeshes;
             _settingsService.CurrentSettings.HideWh2TextureSelectors = HideWh2TextureSelectors;
+            _settingsService.CurrentSettings.CurrentTheme = CurrentTheme;
 
             _settingsService.CurrentSettings.GameDirectories.Clear();
             foreach (var item in GameDirectores)

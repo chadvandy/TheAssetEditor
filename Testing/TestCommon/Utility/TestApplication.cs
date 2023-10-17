@@ -8,7 +8,7 @@ namespace TestCommon.Utility
 {
     public class TestApplication
     {
-        DependencyContainer[] _dependencyContainers = new DependencyContainer[]
+        readonly DependencyContainer[] _dependencyContainers = new DependencyContainer[]
         {
             new CommonControls_DependencyInjectionContainer(false),
             new View3D_DependencyContainer(),

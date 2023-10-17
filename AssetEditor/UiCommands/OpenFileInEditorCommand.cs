@@ -13,9 +13,9 @@ namespace AssetEditor.UiCommands
             _editorCreator = editorCreator;
         }
 
-        public void Execute(PackFile file)
+        public void Execute(PackFile file, PackFileContainer pack = null)
         {
-            _editorCreator.OpenFile(file);
+            _editorCreator.OpenFile(file, pack);
         }
     }
 }

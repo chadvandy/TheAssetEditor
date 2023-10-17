@@ -13,7 +13,7 @@ using View3D.Services;
 namespace KitbasherEditor.ViewModels
 {
     public class KitbasherViewModel : NotifyPropertyChangedImpl, IEditorViewModel, IEditorScopeResolverHint, ISaveableEditor,
-        IDropTarget<TreeNode>
+        IDropTarget<PackFileTreeNode>
     {
         private readonly KitbasherRootScene _kitbasherRootScene;
         private readonly KitbashViewDropHandler _dropHandler;
@@ -65,8 +65,8 @@ namespace KitbasherEditor.ViewModels
             }
         }
 
-        public bool AllowDrop(TreeNode node, TreeNode targeNode = null) => _dropHandler.AllowDrop(node, targeNode);
-        public bool Drop(TreeNode node, TreeNode targeNode = null) => _dropHandler.Drop(node, targeNode);
+        public bool AllowDrop(PackFileTreeNode node, PackFileTreeNode targeNode = null) => _dropHandler.AllowDrop(node, targeNode);
+        public bool Drop(PackFileTreeNode node, PackFileTreeNode targeNode = null) => _dropHandler.Drop(node, targeNode);
 
         void OnFileSaved(FileSavedEvent notification)
         {

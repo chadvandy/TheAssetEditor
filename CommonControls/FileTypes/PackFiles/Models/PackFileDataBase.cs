@@ -35,6 +35,8 @@ namespace CommonControls.FileTypes.PackFiles.Models
         // File added
         // FileRemoved
 
+        public PackFileContainer VanillaPackFile { get; set; }
+
         public List<PackFileContainer> PackFiles { get; set; } = new List<PackFileContainer>();
         public PackFileContainer PackSelectedForEdit { get; set; }
 
@@ -42,6 +44,12 @@ namespace CommonControls.FileTypes.PackFiles.Models
         {
             PackFiles.Add(pf);
             PackFileContainerLoaded?.Invoke(pf);
+        }
+
+        public void LoadVanillaPack(PackFileContainer pf)
+        {
+            //if (pf == null)
+            VanillaPackFile = pf;
         }
 
         public void RemovePackFile(PackFileContainer pf)
@@ -61,6 +69,7 @@ namespace CommonControls.FileTypes.PackFiles.Models
         public void Clear()
         {
             PackFiles.Clear();
+            VanillaPackFile = null;
         }
 
         public void TriggerContainerUpdated(PackFileContainer container)

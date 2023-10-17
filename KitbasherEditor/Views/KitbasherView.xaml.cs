@@ -20,12 +20,12 @@ namespace KitbasherEditor.Views
         {
             try
             {
-                var dropTarget = DataContext as IDropTarget<TreeNode>;
+                var dropTarget = DataContext as IDropTarget<PackFileTreeNode>;
                 if (dropTarget != null)
                 {
                     var formats = e.Data.GetFormats();
                     object droppedObject = e.Data.GetData(formats[0]);
-                    var node = droppedObject as TreeNode;
+                    var node = droppedObject as PackFileTreeNode;
 
                     if (dropTarget.AllowDrop(node))
                     {

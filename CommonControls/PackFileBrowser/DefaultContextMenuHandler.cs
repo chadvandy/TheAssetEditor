@@ -14,7 +14,7 @@ namespace CommonControls.PackFileBrowser
         public DefaultContextMenuHandler(PackFileService service, IToolFactory toolFactory, IUiCommandFactory uiCommandFactory) : base(service, toolFactory, uiCommandFactory)
         { }
 
-        public override void Create(TreeNode node)
+        public override void Create(PackFileTreeNode node)
         {
             _selectedNode = node;
             if (node == null)

@@ -13,7 +13,7 @@ namespace CommonControls.PackFileBrowser
 {
     public class PackFileFilter : NotifyPropertyChangedImpl
     {
-        ObservableCollection<TreeNode> _nodeCollection;
+        ObservableCollection<PackFileTreeNode> _nodeCollection;
         DispatcherTimer _filterTimer;
 
         string _filterText = "";
@@ -41,7 +41,7 @@ namespace CommonControls.PackFileBrowser
         List<string> _extentionFilter;
         public int AutoExapandResultsAfterLimitedCount { get; set; } = -1;
 
-        public PackFileFilter(ObservableCollection<TreeNode> nodes)
+        public PackFileFilter(ObservableCollection<PackFileTreeNode> nodes)
         {
             _nodeCollection = nodes;
         }
@@ -96,7 +96,7 @@ namespace CommonControls.PackFileBrowser
             }
         }
 
-        int CountVisibleNodes(TreeNode file)
+        int CountVisibleNodes(PackFileTreeNode file)
         {
             if (file.NodeType == NodeType.File && file.IsVisible)
                 return 1;
@@ -114,7 +114,7 @@ namespace CommonControls.PackFileBrowser
             Filter(FilterText);
         }
 
-        bool HasChildWithFilterMatch(TreeNode file, Regex expression)
+        bool HasChildWithFilterMatch(PackFileTreeNode file, Regex expression)
         {
             if (file.NodeType == NodeType.Root && file.Children.Count == 0)
             {

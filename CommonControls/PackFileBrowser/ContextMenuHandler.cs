@@ -49,7 +49,7 @@ namespace CommonControls.PackFileBrowser
 
         protected PackFileService _packFileService;
 
-        protected TreeNode _selectedNode;
+        protected PackFileTreeNode _selectedNode;
         protected IToolFactory _toolFactory;
         private readonly IUiCommandFactory _uiCommandFactory;
 
@@ -193,7 +193,7 @@ namespace CommonControls.PackFileBrowser
                     MessageBox.Show("Folder name can not be empty!");
                     return;
                 }
-                _selectedNode.Children.Add(new TreeNode(window.TextValue, NodeType.Directory, _selectedNode.FileOwner, _selectedNode));
+                _selectedNode.Children.Add(new PackFileTreeNode(window.TextValue, NodeType.Directory, _selectedNode.FileOwner, _selectedNode));
             }
         }
 
@@ -319,7 +319,7 @@ namespace CommonControls.PackFileBrowser
             }
         }
 
-        void SaveSelfAndChildren(TreeNode node, string outputDirectory, string rootPath, ref int fileCounter)
+        void SaveSelfAndChildren(PackFileTreeNode node, string outputDirectory, string rootPath, ref int fileCounter)
         {
             if (node.NodeType == NodeType.Directory)
             {
@@ -369,21 +369,21 @@ namespace CommonControls.PackFileBrowser
             Process.Start(applicationPath, $"\"{path}\"");
         }
 
-        void ExpandAllRecursive(TreeNode node)
+        void ExpandAllRecursive(PackFileTreeNode node)
         {
             node.IsNodeExpanded = true;
             foreach (var child in node.Children)
                 ExpandAllRecursive(child);
         }
 
-        void CollapsAllRecursive(TreeNode node)
+        void CollapsAllRecursive(PackFileTreeNode node)
         {
             node.IsNodeExpanded = false;
             foreach (var child in node.Children)
                 CollapsAllRecursive(child);
         }
 
-        public abstract void Create(TreeNode node);
+        public abstract void Create(PackFileTreeNode node);
 
 
         protected ContextMenuItem Additem(ContextItems type, ContextMenuItem parent)

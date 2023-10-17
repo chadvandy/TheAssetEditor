@@ -5,50 +5,47 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:behaviors="clr-namespace:CommonControls.Behaviors" 
              xmlns:e1="http://schemas.microsoft.com/xaml/behaviors" 
-             xmlns:nodevalueconverters="clr-namespace:CommonControls.PackFileBrowser"
+             xmlns:nodevalueconverters="clr-namespace:CommonControls.PackFileBrowser" d:DataContext="{d:DesignInstance Type=nodevalueconverters:PackFileBrowserViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             x:Name="mystuff">
+             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <nodevalueconverters:PackFileToImageValueConverter x:Key="ImageValueConverter"/>
         <nodevalueconverters:SortedCollectionViewSource x:Key="SortedCollectionViewSource" Property0="NodeType" Property1="Name"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{Binding Mode=OneWay, Source={StaticResource ControlDefaultBorderBrush}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="FilterTextBoxItem" KeyboardNavigation.TabIndex="0" KeyboardNavigation.IsTabStop="True"  Grid.Column="1" Grid.Row="0" Text="{Binding Filter.FilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=350}" behaviors:TextBoxExtensions.Watermark="Search filter">
-            <TextBox.Resources>
-                <Style TargetType="{x:Type TextBox}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Filter.HasRegExError}" Value="true">
-                            <Setter Property="Background" Value="Red" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Resources>
-        </TextBox>
-        <Button Click="ClearButtonClick" Command="{Binding ClearTextCommand}" Padding="4,0" HorizontalAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" Grid.Row="0">
-            <Button.Content>
-                Clear
-            </Button.Content>
-        </Button>
+        <StackPanel x:Name="Header" Orientation="Horizontal">
+
+            <Label x:Name="PackFileHeader" Content="{Binding PackFileTypeHeader}" Width="100"/>
+            <Grid Height="20" Margin="0,0,0,0" Width="300" MinWidth="150">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Save"/>
+                <Button Content="Add" Grid.Column="1"/>
+                <Button Content="Expand" Grid.Column="2"/>
+            </Grid>
+        </StackPanel>
 
         <TreeView  x:Name="tvParameters"
-            AllowDrop="True"
-            Grid.Row="1" 
+            AllowDrop="True" 
             behaviors:TreeViewExtension.SelectItemOnRightClick="True"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ItemsSource="{Binding Path=Files, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Files, UpdateSourceTrigger=PropertyChanged}"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.VirtualizationMode="Recycling"
-            VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+            VirtualizingPanel.IsVirtualizingWhenGrouping="True" Grid.Row="1">
 
             <TreeView.Resources>
-                <ContextMenu x:Key="NodeContextMenu" ItemsSource="{Binding DataContext.ContextMenu.Items, UpdateSourceTrigger=PropertyChanged,  RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" DisplayMemberPath="Name">
+                <ContextMenu x:Key="NodeContextMenu" ItemsSource="{Binding DataContext.ContextMenu.Items, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name">
                     <ContextMenu.Resources>
                         <ControlTemplate x:Key="MenuSeparatorTemplate">
                             <Separator />
@@ -56,11 +53,11 @@
                     </ContextMenu.Resources>
 
                     <ContextMenu.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
+                        <Style TargetType="{x:Type MenuItem}">
                             <Setter Property="Command" Value="{Binding Command}"/>
                             <Setter Property="ItemsSource" Value="{Binding ContextMenu}"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding }" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding ''}" Value="{x:Null}">
                                     <Setter Property="Template" Value="{StaticResource MenuSeparatorTemplate}" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -76,12 +73,12 @@
 
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove"/>
-                    <EventSetter Event="TreeViewItem.Drop" Handler="treeView_Drop"/>
-                    <EventSetter Event="TreeViewItem.PreviewMouseLeftButtonDown" Handler="TreeView_MouseDown"/>
-                    <EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
-                    <Setter Property="behaviors:MouseDoubleClick.Command" Value="{Binding DataContext.DoubleClickCommand,  RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}, Mode=OneTime}"/>
-                    <Setter Property="IsExpanded" Value="{Binding IsNodeExpanded, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <EventSetter Event="UIElement.MouseMove" Handler="treeView_MouseMove"/>
+                    <EventSetter Event="UIElement.Drop" Handler="treeView_Drop"/>
+                    <EventSetter Event="UIElement.PreviewMouseLeftButtonDown" Handler="TreeView_MouseDown"/>
+                    <EventSetter Event="UIElement.PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown"/>
+                    <Setter Property="behaviors:MouseDoubleClick.Command" Value="{Binding DataContext.DoubleClickCommand, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type TreeView}, Mode=FindAncestor}}"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsNodeExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Setter Property="ContextMenu" Value="{StaticResource NodeContextMenu}"/>
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
@@ -115,12 +112,31 @@
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Width="12" Grid.Column="0" Source="{Binding Path=., Converter={StaticResource ImageValueConverter}, Mode=OneTime}"/>
+                        <Image Width="12" Grid.Column="0" Source="{Binding ., Converter={StaticResource ImageValueConverter}, Mode=OneTime}"/>
                         <TextBlock Grid.Column="1" Text="{Binding UnsavedChanged, Converter={StaticResource BoolToChangedPrefixStr}, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Margin="4,0,0,0" Grid.Column="2" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        <Grid x:Name="Filter" Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="tb_FilterItem" KeyboardNavigation.TabIndex="0" KeyboardNavigation.IsTabStop="True" Text="{Binding Filter.FilterText, Delay=350, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxExtensions.Watermark="Search filter" MinHeight="15" MinWidth="100">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Filter.HasRegExError}" Value="true">
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <Button x:Name="btn_ClearFilter" Click="ClearButtonClick" Command="{Binding ClearTextCommand}" Padding="4,0" VerticalContentAlignment="Center" Content="Clear" Grid.Column="1" MinHeight="15" MinWidth="50"/>
+        </Grid>
+        <ToolBarTray HorizontalAlignment="Left" Height="100" Margin="1124,133,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </UserControl>

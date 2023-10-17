@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CommonControls.PackFileBrowser"
         mc:Ignorable="d"
         Title="PackFileBrowserWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="{Binding Mode=OneWay, Source={StaticResource ControlDefaultBackground}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>

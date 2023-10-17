@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,22 +15,48 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace CommonControls.PackFileBrowser
 {
-    public delegate void FileSelectedDelegate(PackFile file);
-    public delegate void NodeSelectedDelegate(TreeNode node);
+    public enum PfsType
+    {
+        All,
+        Vanilla,
+        Opened
+    }
 
-    public class PackFileBrowserViewModel : NotifyPropertyChangedImpl, IDisposable, IDropTarget<TreeNode>
+    public delegate void FileSelectedDelegate(PackFile file, PackFileContainer pack);
+    public delegate void NodeSelectedDelegate(PackFileTreeNode node);
+
+    public class PackFileBrowserViewModel : NotifyPropertyChangedImpl, IDisposable, IDropTarget<PackFileTreeNode>
     {
         protected PackFileService _packFileService;
         public event FileSelectedDelegate FileOpen;
         public event NodeSelectedDelegate NodeSelected;
 
-        public ObservableCollection<TreeNode> Files { get; set; } = new ObservableCollection<TreeNode>();
+        public ObservableCollection<PackFileTreeNode> Files { get; set; } = new ObservableCollection<PackFileTreeNode>();
         public PackFileFilter Filter { get; private set; }
         public ICommand DoubleClickCommand { get; set; }
         public ICommand ClearTextCommand { get; set; }
 
-        TreeNode _selectedItem;
-        public TreeNode SelectedItem
+        public PfsType PackFileType;
+
+        public string PackFileTypeHeader { 
+            get
+            {
+                switch (PackFileType)
+                {
+                    case PfsType.All:
+                        return "All Packs";
+                    case PfsType.Vanilla:
+                        return "Vanilla Packs";
+                    case PfsType.Opened:
+                        return "Opened Packs";
+                    default:
+                        return "";
+                }
+            } 
+        }
+
+        PackFileTreeNode _selectedItem;
+        public PackFileTreeNode SelectedItem
         {
             get => _selectedItem;
             set
@@ -43,9 +69,9 @@ namespace CommonControls.PackFileBrowser
 
         public ContextMenuHandler ContextMenu { get; set; }
 
-        public PackFileBrowserViewModel(PackFileService packFileService, bool ignoreCaFiles = false)
+        public PackFileBrowserViewModel(PackFileService packFileService, PfsType pfsType)
         {
-            DoubleClickCommand = new RelayCommand<TreeNode>(OnDoubleClick);
+            DoubleClickCommand = new RelayCommand<PackFileTreeNode>(OnDoubleClick);
             ClearTextCommand = new RelayCommand(OnClearText);
 
             _packFileService = packFileService;
@@ -59,17 +85,35 @@ namespace CommonControls.PackFileBrowser
             _packFileService.Database.PackFileFolderRemoved += Database_PackFileFolderRemoved;
             _packFileService.Database.PackFileFolderRenamed += Database_PackFileFolderRenamed;
 
+            PackFileType = pfsType;
+
             Filter = new PackFileFilter(Files);
 
-            foreach (var item in _packFileService.Database.PackFiles)
-            {
-                bool loadFile = true;
-                if (ignoreCaFiles)
-                    loadFile = !item.IsCaPackFile;
+            PackFileContainer container;
 
-                if (loadFile)
-                    ReloadTree(item);
+            switch (pfsType)
+            {
+                case PfsType.All:
+                    foreach (var item in _packFileService.Database.PackFiles)
+                    {
+                        ReloadTree(item);
+                    }
+                    ReloadTree(_packFileService.Database.VanillaPackFile);
+                    break;
+                case PfsType.Vanilla:
+                    container = _packFileService.Database.VanillaPackFile;
+                    ReloadTree(container);
+                    break;
+                case PfsType.Opened:
+                    foreach (var item in _packFileService.Database.PackFiles)
+                    {
+                        if (!item.IsCaPackFile) ReloadTree(item);
+                    }
+                    break;
+                default:
+                    break;
             }
+
         }
 
         private void Database_PackFileFolderRemoved(PackFileContainer container, string folder)
@@ -129,14 +173,14 @@ namespace CommonControls.PackFileBrowser
             Filter.FilterText = "";
         }
 
-        protected virtual void OnDoubleClick(TreeNode node)
+        protected virtual void OnDoubleClick(PackFileTreeNode node)
         {
             // using command parmeter to get node causes memory leaks, using selected node for now
             if (SelectedItem != null)
             {
                 if (SelectedItem.NodeType == NodeType.File)
                 {
-                    FileOpen?.Invoke(SelectedItem.Item);
+                    FileOpen?.Invoke(SelectedItem.Item, SelectedItem.FileOwner);
                 }
                 else if (SelectedItem.NodeType == NodeType.Directory && Keyboard.IsKeyDown(Key.LeftCtrl))
                 {
@@ -147,10 +191,11 @@ namespace CommonControls.PackFileBrowser
 
         private void ContainerUpdated(PackFileContainer pf)
         {
-            foreach (var item in Files)
-                item.IsMainEditabelPack = false;
+            //foreach (var item in Files)
+            //    item.IsMainEditabelPack = false;
 
-            Files.FirstOrDefault(x => x.FileOwner == pf).IsMainEditabelPack = true;
+
+            //Files.FirstOrDefault(x => x.FileOwner == pf).IsMainEditabelPack = true;
         }
 
 
@@ -167,17 +212,17 @@ namespace CommonControls.PackFileBrowser
                 var directoryEnd = fullPath.LastIndexOf(Path.DirectorySeparatorChar);
                 var fileName = fullPath.Substring(directoryEnd + 1);
 
-                TreeNode newNode;
+                PackFileTreeNode newNode;
                 if (numSeperators == 0)
                 {
-                    newNode = new TreeNode(fileName, NodeType.File, container, root, item);
+                    newNode = new PackFileTreeNode(fileName, NodeType.File, container, root, item);
                     root.Children.Add(newNode);
                 }
                 else
                 {
                     var directory = fullPath.Substring(0, directoryEnd);
                     var folder = GetNodeFromPath(root, container, directory);
-                    newNode = new TreeNode(fileName, NodeType.File, container, folder, item);
+                    newNode = new PackFileTreeNode(fileName, NodeType.File, container, folder, item);
 
                     // remove any existing files with same name
                     var existingFile = folder.Children.FirstOrDefault(node => node.Name == item.Name);
@@ -199,7 +244,7 @@ namespace CommonControls.PackFileBrowser
             }
         }
 
-        TreeNode GetNodeFromPath(TreeNode parent, PackFileContainer container, string path, bool createIfMissing = true)
+        PackFileTreeNode GetNodeFromPath(PackFileTreeNode parent, PackFileContainer container, string path, bool createIfMissing = true)
         {
             var numSeperators = path.Count(x => x == Path.DirectorySeparatorChar);
             if (path.Length == 0)
@@ -223,14 +268,14 @@ namespace CommonControls.PackFileBrowser
 
             if (createIfMissing)
             {
-                var newNode = new TreeNode(nodeName, NodeType.Directory, container, parent);
+                var newNode = new PackFileTreeNode(nodeName, NodeType.Directory, container, parent);
                 parent.Children.Add(newNode);
                 return GetNodeFromPath(newNode, container, remainingStr);
             }
             return null;
         }
 
-        TreeNode GetPackFileCollectionRootNode(PackFileContainer container)
+        PackFileTreeNode GetPackFileCollectionRootNode(PackFileContainer container)
         {
             foreach (var child in Files)
             {
@@ -240,7 +285,7 @@ namespace CommonControls.PackFileBrowser
             return null;
         }
 
-        TreeNode GetNodeFromPackFile(PackFileContainer container, PackFile pf, bool createIfMissing = true)
+        PackFileTreeNode GetNodeFromPackFile(PackFileContainer container, PackFile pf, bool createIfMissing = true)
         {
             var root = GetPackFileCollectionRootNode(container);
             var fullPath = _packFileService.GetFullPath(pf, container);
@@ -260,16 +305,25 @@ namespace CommonControls.PackFileBrowser
             }
         }
 
-
         private void ReloadTree(PackFileContainer container)
         {
+            switch (PackFileType)
+            {
+                case PfsType.Vanilla:
+                    if (!container.IsCaPackFile) return;
+                    break;
+                case PfsType.Opened:
+                    if (container.IsCaPackFile) return;
+                    break;
+            }
+
             var existingNode = Files.FirstOrDefault(x => x.FileOwner == container);
             if (existingNode != null)
                 Files.Remove(existingNode);
 
-            var root = new TreeNode(container.Name, NodeType.Root, container, null);
+            var root = new PackFileTreeNode(container.Name, NodeType.Root, container, null);
             root.IsMainEditabelPack = _packFileService.GetEditablePack() == container;
-            var directoryMap = new Dictionary<string, TreeNode>();
+            var directoryMap = new Dictionary<string, PackFileTreeNode>();
 
             foreach (var item in container.FileList)
             {
@@ -278,7 +332,7 @@ namespace CommonControls.PackFileBrowser
 
                 if (pathParts.Length == 1)
                 {
-                    root.Children.Add(new TreeNode(pathParts[0], NodeType.File, container, root, item.Value));
+                    root.Children.Add(new PackFileTreeNode(pathParts[0], NodeType.File, container, root, item.Value));
                 }
                 else
                 {
@@ -291,7 +345,7 @@ namespace CommonControls.PackFileBrowser
                     {
                         var currentIndexComputed = 0;
 
-                        TreeNode lastNode = root;
+                        PackFileTreeNode lastNode = root;
                         for (int i = 0; i < numSeperators; i++)
                         {
                             currentIndexComputed += pathParts[i].Length + 1;
@@ -300,7 +354,7 @@ namespace CommonControls.PackFileBrowser
                             if (directoryMap.TryGetValue(subDirString, out var lookUpNode) == false)
                             {
                                 var folderNodeName = pathParts[i];
-                                var currentNode = new TreeNode(folderNodeName, NodeType.Directory, container, lastNode);
+                                var currentNode = new PackFileTreeNode(folderNodeName, NodeType.Directory, container, lastNode);
                                 lastNode.Children.Add(currentNode);
                                 lastNode = currentNode;
 
@@ -314,7 +368,7 @@ namespace CommonControls.PackFileBrowser
                     }
 
                     var fileName = pathParts.Last();
-                    var treeNode = new TreeNode(fileName, NodeType.File, container, directoryMap[directory], item.Value);
+                    var treeNode = new PackFileTreeNode(fileName, NodeType.File, container, directoryMap[directory], item.Value);
                     directoryMap[directory].Children.Add(treeNode);
                 }
             }
@@ -340,7 +394,7 @@ namespace CommonControls.PackFileBrowser
             _packFileService.Database.PackFileFolderRemoved -= Database_PackFileFolderRemoved;
         }
 
-        public bool AllowDrop(TreeNode node, TreeNode targetNode = null)
+        public bool AllowDrop(PackFileTreeNode node, PackFileTreeNode targetNode = null)
         {
             if (node.Item == null) // dragging a folder not supported
                 return false;
@@ -357,7 +411,7 @@ namespace CommonControls.PackFileBrowser
             return true;
         }
 
-        public bool Drop(TreeNode node, TreeNode targeNode)
+        public bool Drop(PackFileTreeNode node, PackFileTreeNode targeNode)
         {
             var container = node.FileOwner;
             var draggedFile = node.Item;

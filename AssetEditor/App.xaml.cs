@@ -15,6 +15,8 @@ namespace AssetEditor
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+    /// 
+
     public partial class App : Application
     {
         IServiceProvider _serviceProvider;

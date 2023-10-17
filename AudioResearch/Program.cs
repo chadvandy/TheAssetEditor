@@ -1,4 +1,4 @@
-using AssetEditor;
+﻿using AssetEditor;
 using Audio.FileFormats.WWise;
 using Audio.FileFormats.WWise.Hirc.V136;
 using Audio.Storage;
@@ -40,7 +40,7 @@ namespace AudioResearch
             //
             //// OvnTest.Compile();
             ////GeneratOvnProject();
-            /// TestDialogEventSerialization();
+            //// TestDialogEventSerialization();
             //// LogicalChainingTest();
             //
             //var currentProjectName = $"Data\\OvnExample\\ProjectSimple.json";
@@ -162,7 +162,7 @@ namespace AudioResearch
                     .Select(x => new
                     {
                         EventName = x.EventName,
-                        SoundCount = x.Sound.Count(),
+                        SoundCount = x.Sound.Count,
                         OverrideBusIds = x.Sound.Select(x => x.NodeBaseParams.OverrideBusId).Distinct().ToList(),
                         OverrideBusIdsEqual = x.Sound.Select(x => x.NodeBaseParams.OverrideBusId).Distinct().Count() == 1
                     })
@@ -381,15 +381,15 @@ namespace AudioResearch
                 HircType.Action
             };
 
-            StringBuilder master = new StringBuilder();
-            StringBuilder ids = new StringBuilder();
+            var master = new StringBuilder();
+            var ids = new StringBuilder();
             foreach (var item in objectTypes)
             {
                 var itemGroup = allHircs.Where(x => x.Type == item).ToArray();
                 var hircAsString = JsonSerializer.Serialize<object[]>(itemGroup, option);
                 File.WriteAllText($"c:\\temp\\HircList\\{item}.json", hircAsString);
 
-                master.AppendLine(item + " count:" + itemGroup.Count());
+                master.AppendLine(item + " count:" + itemGroup.Length);
                 master.AppendLine(hircAsString + "\n\n");
 
                 var localIds = itemGroup.Select(x => $"{x.Id} {x.Type} {x.OwnerFile} {x.IndexInFile}").ToList();

@@ -2,16 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using CommonControls.Common;
 using Newtonsoft.Json;
 using Serilog;
 
 namespace CommonControls.Services
 {
+    public enum ThemeTypeEnum
+    {
+        Light, 
+        Colorful,
+        Dark,
+        //DarkColourful
+    }
 
     public class ApplicationSettings
     {
@@ -33,8 +42,7 @@ namespace CommonControls.Services
         public bool IsFirstTimeStartingApplication { get; set; } = true;
         public bool IsDeveloperRun { get; set; } = false;
         public bool HideWh2TextureSelectors { get; set; } = false;
-
-
+        public ThemeTypeEnum CurrentTheme { get; set; } = ThemeTypeEnum.Light;
     }
 
     public class ApplicationSettingsService
@@ -80,6 +88,40 @@ namespace CommonControls.Services
             }
         }
 
+        public ResourceDictionary ThemeDictionary
+        {
+            get { return Application.Current.Resources.MergedDictionaries[0]; }
+            set { Application.Current.Resources.MergedDictionaries[0] = value; }
+        }
+
+        public void ChangeTheme(ThemeTypeEnum theme)
+        {
+            CurrentSettings.CurrentTheme = theme;
+
+            string themeName = null;
+            switch (theme)
+            {
+                case ThemeTypeEnum.Light:
+                    themeName = "LightTheme";
+                    break;
+                case ThemeTypeEnum.Colorful:
+                    themeName = "ColorfulTheme";
+                    break;
+                case ThemeTypeEnum.Dark:
+                    themeName = "DarkTheme";
+                    break;
+            }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(themeName))
+                {
+                    ThemeDictionary = new ResourceDictionary() { Source = new Uri($"Resources/Themes/{themeName}.xaml", UriKind.RelativeOrAbsolute) };
+                }
+            }
+            finally { }
+        }
+
         public void AddRecentlyOpenedPackFile(string path)
         {
             var recentPackFilePaths = CurrentSettings.RecentPackFilePaths;
@@ -114,6 +156,7 @@ namespace CommonControls.Services
             var jsonStr = JsonConvert.SerializeObject(CurrentSettings, Formatting.Indented);
             File.WriteAllText(SettingsFile, jsonStr);
 
+            ChangeTheme(CurrentSettings.CurrentTheme);
             SettingsChanged?.Invoke(CurrentSettings);
         }
 
@@ -128,6 +171,7 @@ namespace CommonControls.Services
                 CurrentSettings = JsonConvert.DeserializeObject<ApplicationSettings>(content);
 
                 _logger.Here().Information($"Settings loaded.");
+                ChangeTheme(CurrentSettings.CurrentTheme);
                 ValidateRecentPackFilePaths();
             }
             else

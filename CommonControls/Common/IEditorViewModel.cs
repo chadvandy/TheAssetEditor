@@ -27,7 +27,7 @@ namespace CommonControls.Common
 
     public interface IEditorCreator
     {
-        void OpenFile(PackFile file);
+        void OpenFile(PackFile file, PackFileContainer pack = null);
         void CreateEmptyEditor(IEditorViewModel editorView);
     }
 

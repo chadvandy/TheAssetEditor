@@ -37,11 +37,11 @@ namespace CommonControls.PackFileBrowser
 
                 _lastMouseDown = e.GetPosition(tvParameters);
 
-                _draggedItem = item.DataContext as TreeNode;
+                _draggedItem = item.DataContext as PackFileTreeNode;
             }
         }
         Point _lastMouseDown;
-        TreeNode _draggedItem;
+        PackFileTreeNode _draggedItem;
 
         private void treeView_MouseMove(object sender, MouseEventArgs e)
         {
@@ -74,13 +74,13 @@ namespace CommonControls.PackFileBrowser
         {
             try
             {
-                if (DataContext is IDropTarget<TreeNode> dropContainer)
+                if (DataContext is IDropTarget<PackFileTreeNode> dropContainer)
                 {
                     if (_draggedItem == null)
                         return;
 
                     var dropTargetItem = sender as TreeViewItem;
-                    var dropTargetNode = dropTargetItem?.DataContext as TreeNode;
+                    var dropTargetNode = dropTargetItem?.DataContext as PackFileTreeNode;
                     if (dropTargetNode == null)
                         return;
 
@@ -99,7 +99,7 @@ namespace CommonControls.PackFileBrowser
 
         private void ClearButtonClick(object sender, RoutedEventArgs e)
         {
-            FilterTextBoxItem.Focus();
+            tb_FilterItem.Focus();
         }
 
         private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseEventArgs e)

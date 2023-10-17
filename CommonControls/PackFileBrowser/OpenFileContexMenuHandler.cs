@@ -8,7 +8,7 @@ namespace CommonControls.PackFileBrowser
         public OpenFileContexMenuHandler(PackFileService service) : base(service, null, null)
         { }
 
-        public override void Create(TreeNode node)
+        public override void Create(PackFileTreeNode node)
         {
             _selectedNode = node;
             Items = new ObservableCollection<ContextMenuItem>();

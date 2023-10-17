@@ -20,7 +20,8 @@ namespace AssetEditor.ViewModels
         private readonly PackFileService _packfileService;
         private readonly IUiCommandFactory _uiCommandFactory;
 
-        public PackFileBrowserViewModel FileTree { get; private set; }
+        public PackFileBrowserViewModel OpenedPackFileTree { get; private set; }
+        public PackFileBrowserViewModel VanillaPackFileTree { get; private set; }
         public MenuBarViewModel MenuBar { get; set; }
 
         public IToolFactory ToolsFactory { get; set; }
@@ -65,14 +66,22 @@ namespace AssetEditor.ViewModels
             CloseToolsToRightCommand = new RelayCommand<IEditorViewModel>(CloseToolsToRight);
             CloseToolsToLeftCommand = new RelayCommand<IEditorViewModel>(CloseToolsToLeft);
 
-            FileTree = new PackFileBrowserViewModel(_packfileService);
-            FileTree.ContextMenu = new DefaultContextMenuHandler(_packfileService, toolFactory, uiCommandFactory);
-            FileTree.FileOpen += OpenFile;
+            //FileTree = new PackFileBrowserViewModel(_packfileService);
+            //FileTree.ContextMenu = new DefaultContextMenuHandler(_packfileService, toolFactory, uiCommandFactory);
+            //FileTree.FileOpen += OpenFile;
+
+            OpenedPackFileTree = new PackFileBrowserViewModel(_packfileService, PfsType.Opened);
+            OpenedPackFileTree.ContextMenu = new DefaultContextMenuHandler(_packfileService, toolFactory, uiCommandFactory);
+            OpenedPackFileTree.FileOpen += OpenFile;
+
+            VanillaPackFileTree = new PackFileBrowserViewModel(_packfileService, PfsType.Vanilla);
+            VanillaPackFileTree.ContextMenu = new DefaultContextMenuHandler(_packfileService, toolFactory, uiCommandFactory);
+            VanillaPackFileTree.FileOpen += OpenFile;
 
             ToolsFactory = toolFactory;
         }
 
-        void OpenFile(PackFile file) => _uiCommandFactory.Create<OpenFileInEditorCommand>().Execute(file);
+        void OpenFile(PackFile file, PackFileContainer pack) => _uiCommandFactory.Create<OpenFileInEditorCommand>().Execute(file, pack);
 
         private void Closing(IEditorViewModel editor)
         {
@@ -81,7 +90,7 @@ namespace AssetEditor.ViewModels
                 .Cast<ISaveableEditor>()
                 .Any(x => x.HasUnsavedChanges);
 
-            var hasUnsavedPackFiles = FileTree.Files.Any(node => node.UnsavedChanged);
+            var hasUnsavedPackFiles = OpenedPackFileTree.Files.Any(node => node.UnsavedChanged);
 
             if ( !(hasUnsavedPackFiles || hasUnsavedEditorChanges) )
             {
@@ -215,7 +224,7 @@ namespace AssetEditor.ViewModels
             _mainViewModel.SelectedEditorIndex = _mainViewModel.CurrentEditorsList.Count - 1;
         }
 
-        public void OpenFile(PackFile file)
+        public void OpenFile(PackFile file, PackFileContainer pack = null)
         {
             if (file == null)
             {
@@ -231,7 +240,7 @@ namespace AssetEditor.ViewModels
                 return;
             }
 
-            var fullFileName = _packFileService.GetFullPath(file);
+            var fullFileName = _packFileService.GetFullPath(file, pack);
             var editorViewModel = _toolFactory.Create(fullFileName);
 
             _logger.Here().Information($"Opening {file.Name} with {editorViewModel.GetType().Name}");

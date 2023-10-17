@@ -29,7 +29,7 @@ namespace CommonControls.PackFileBrowser
 
         void Create(PackFileService packfileService)
         {
-            ViewModel = new PackFileBrowserViewModel(packfileService);
+            ViewModel = new PackFileBrowserViewModel(packfileService, PfsType.All);
             ViewModel.ContextMenu = new OpenFileContexMenuHandler(packfileService);
             ViewModel.FileOpen += ViewModel_FileOpen;
             ViewModel.Filter.AutoExapandResultsAfterLimitedCount = 50;
@@ -47,7 +47,7 @@ namespace CommonControls.PackFileBrowser
                 Close();
         }
 
-        private void ViewModel_FileOpen(PackFile file)
+        private void ViewModel_FileOpen(PackFile file, PackFileContainer pack)
         {
             SelectedFile = file;
             if (DialogResult != true)

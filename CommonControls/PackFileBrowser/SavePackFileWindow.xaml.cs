@@ -16,7 +16,7 @@ namespace CommonControls.PackFileBrowser
         public PackFile SelectedFile { get; set; }
         public PackFileBrowserViewModel ViewModel { get; set; }
 
-        TreeNode _selectedNode;
+        PackFileTreeNode _selectedNode;
         string _currentFileName;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -29,7 +29,7 @@ namespace CommonControls.PackFileBrowser
         public SavePackFileWindow(PackFileService packfileService)
         {
             _packfileService = packfileService;
-            ViewModel = new PackFileBrowserViewModel(packfileService, true);
+            ViewModel = new PackFileBrowserViewModel(packfileService, PfsType.Opened);
             ViewModel.ContextMenu = new OpenFileContexMenuHandler(packfileService);
             ViewModel.FileOpen += ViewModel_FileOpen;
             ViewModel.NodeSelected += ViewModel_FileSelected;
@@ -37,7 +37,7 @@ namespace CommonControls.PackFileBrowser
             DataContext = this;
         }
 
-        private void ViewModel_FileSelected(TreeNode node)
+        private void ViewModel_FileSelected(PackFileTreeNode node)
         {
             _selectedNode = node;
 
@@ -49,7 +49,7 @@ namespace CommonControls.PackFileBrowser
             SelectedFile = _selectedNode.Item;
         }
 
-        private void ViewModel_FileOpen(PackFile file)
+        private void ViewModel_FileOpen(PackFile file, PackFileContainer pack)
         {
             SelectedFile = file;
             Button_Click(null, null);

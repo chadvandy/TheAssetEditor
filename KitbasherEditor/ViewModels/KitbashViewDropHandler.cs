@@ -13,7 +13,7 @@ namespace KitbasherEditor.ViewModels
             _kitbashSceneCreator = kitbashSceneCreator;
         }
 
-        public bool AllowDrop(TreeNode node, TreeNode targeNode = null)
+        public bool AllowDrop(PackFileTreeNode node, PackFileTreeNode targeNode = null)
         {
             if (node != null && node.NodeType == NodeType.File)
             {
@@ -24,7 +24,7 @@ namespace KitbasherEditor.ViewModels
             return false;
         }
 
-        public bool Drop(TreeNode node, TreeNode targeNode = null)
+        public bool Drop(PackFileTreeNode node, PackFileTreeNode targeNode = null)
         {
             _kitbashSceneCreator.LoadReference(node.Item);
             return true;
