@@ -71,16 +71,14 @@
         </GridSplitter>
 
         <TabControl  Grid.Row="1" Grid.Column="2"
-                     SelectedIndex = "{Binding SelectedEditorIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     ItemsSource="{Binding CurrentEditorsList, UpdateSourceTrigger=PropertyChanged}"
+                     SelectedIndex = "{Binding SelectedEditorIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     ContentTemplateSelector="{StaticResource EditorSelector}"
                      viewFacotry:ToolFactoryParameter.ViewFactory="{Binding ToolsFactory}"
                      x:Name="EditorsTabControl">
             <TabControl.Resources>
                 <common:BindingProxy x:Key="Proxy" Data="{Binding}" />
             </TabControl.Resources>
-
-            <TabControl.ContentTemplateSelector>
-                <StaticResource ResourceKey="EditorSelector"/>
-            </TabControl.ContentTemplateSelector>
 
             <TabControl.ItemContainerStyle>
                 <Style TargetType="{x:Type TabItem}">
