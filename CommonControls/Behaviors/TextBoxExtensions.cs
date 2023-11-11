@@ -84,7 +84,8 @@ namespace CommonControls.Behaviors
                 Padding = new Thickness(2, 1, 1, 1),
                 FontSize = tb.FontSize,
                 FontFamily = tb.FontFamily,
-                Foreground = Brushes.LightGray,
+                //Foreground = Brushes.LightGray,
+                Foreground = (Brush)tb.FindResource("ControlDisabledGlythColour"),
                 Content = text
             });
 

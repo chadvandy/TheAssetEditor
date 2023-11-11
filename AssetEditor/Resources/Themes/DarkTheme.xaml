@@ -11,7 +11,7 @@
     <SolidColorBrush x:Key="TransparentBrush" Color="Transparent"/>
     <SolidColorBrush x:Key="ContainerBackground" Color="#FF272727"/>
     <SolidColorBrush x:Key="ContainerBorder" Color="#FF2B2B2B"/>
-    <SolidColorBrush x:Key="ControlDefaultForeground" Color="#FFEBEBEB"/>
+    <SolidColorBrush x:Key="ControlDefaultForeground" Color="#FF8DAEFF"/>
 
     <SolidColorBrush x:Key="ControlDarkerBackground" Color="#FF2A2A2A"/>
     <SolidColorBrush x:Key="ControlDarkerBorderBrush" Color="#FF2F2F2F"/>
@@ -593,9 +593,8 @@
                     </Border>
                 </Themes:SystemDropShadowChrome>
             </Popup>
-            <ToggleButton x:Name="toggleButton" BorderBrush="{TemplateBinding BorderBrush}"
-                          BorderThickness="{TemplateBinding BorderThickness}"
-                          Background="{TemplateBinding Background}" Grid.ColumnSpan="2"
+            <ToggleButton x:Name="toggleButton" 
+                          Grid.ColumnSpan="2"
                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                           Style="{StaticResource ComboBoxToggleButton}"/>
             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
@@ -605,7 +604,9 @@
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                               IsHitTestVisible="false" Margin="{TemplateBinding Padding}"
                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              TextBlock.Foreground="{StaticResource ControlDefaultForeground}"
+                              />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
@@ -1108,13 +1109,14 @@
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Rectangle Fill="{DynamicResource ControlDefaultBackground}"/>
+                    <Rectangle Fill="{DynamicResource ControlDefaultForeground}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
     <Style TargetType="{x:Type GridSplitter}">
         <Setter Property="Background" Value="{DynamicResource ControlDefaultBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ControlDefaultForeground}"/>
         <Setter Property="PreviewStyle" Value="{StaticResource GridSplitterPreviewStyle}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -1122,6 +1124,18 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <TextBlock 
+                        Text="..." 
+                        Style="{StaticResource TextBlockTemplate}" 
+                        FontSize="14"
+                        Visibility="Visible"
+                        />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -1225,7 +1239,7 @@
 
     <!-- Label -->
 
-    <Style TargetType="{x:Type Label}">
+    <Style TargetType="{x:Type Label}" x:Key="LabelTemplate">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Padding" Value="5"/>
@@ -1247,16 +1261,19 @@
         </Setter>
     </Style>
 
-    <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
+    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelTemplate}"/>
 
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
-    
+
     <!-- Grids -->
     <Style TargetType="{x:Type Grid}">
         <Setter Property="Background" Value="{StaticResource ContainerBackground}"/>
         <Setter Property="Opacity" Value="0.95"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-    </Style>
+    </Style> 
+    
+    <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
+   
 
     <!--  ListBox and ListBoxItems -->
     <Style TargetType="{x:Type ListBox}">
@@ -1716,7 +1733,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type MenuItem}">
+    <Style x:Key="MenuItemTemplate" TargetType="{x:Type MenuItem}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
@@ -1799,6 +1816,8 @@
         </Style.Triggers>
     </Style>
 
+    <Style BasedOn="{StaticResource MenuItemTemplate}" TargetType="{x:Type MenuItem}"/>
+    
     <ControlTemplate x:Key="DropDownMenuItemStyle" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
             <Grid Margin="-1">
@@ -3035,7 +3054,7 @@
         <Setter Property="Background" Value="{StaticResource BackgroundColour}"/>
         <Setter Property="BorderBrush" Value="{StaticResource ControlDefaultBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultBorderBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
@@ -3092,7 +3111,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type TabItem}">
+    <Style x:Key="TabItemTemplate" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Setter Property="Background" Value="{StaticResource ControlDarkerBackground}"/>
@@ -3278,6 +3297,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemTemplate}"/>
     <!-- Alternative Styles -->
     <ControlTemplate x:Key="CloseButton" TargetType="{x:Type TabItem}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
@@ -3536,7 +3557,7 @@
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
 
     <!-- Textblock -->
-    <Style TargetType="{x:Type TextBlock}">
+    <Style x:Key="TextBlockTemplate" TargetType="{x:Type TextBlock}">
         <Setter Property="TextWrapping" Value="NoWrap"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="TextAlignment" Value="Left"/>

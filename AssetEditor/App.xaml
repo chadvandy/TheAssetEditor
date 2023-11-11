@@ -15,14 +15,14 @@
             <valueconverters:BoolToStringConverter x:Key="BoolToChangedPrefixStr" TrueValue="*"/>
 
             <!--Common view items-->
-
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockTemplate}"/>
 
             <!-- Themes! -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="ThemeDictionary">
                     <ResourceDictionary.MergedDictionaries>
                         <ResourceDictionary Source="/Resources/Themes/LightTheme.xaml"/>
-                        <!--<ResourceDictionary Source="/Resources/Themes/Default.xaml"/>-->
+                        <!--<ResourceDictionary Source="/Resources/Themes/DarkTheme.xaml"/>-->
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

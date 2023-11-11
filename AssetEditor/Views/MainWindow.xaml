@@ -41,20 +41,6 @@
 
             <views:FileTreeView x:Name="OpenPackFile" Grid.Row="0" DataContext="{Binding OpenedPackFileTree}"/>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="6">
-                <GridSplitter.Template>
-                    <ControlTemplate TargetType="{x:Type GridSplitter}">
-                        <Grid>
-                            <Rectangle>
-                                <Rectangle.Stroke>
-                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-                                </Rectangle.Stroke>
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlLightColorKey}}"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                        </Grid>
-                    </ControlTemplate>
-                </GridSplitter.Template>
             </GridSplitter>
             <views:FileTreeView x:Name="VanillaPackFile" Grid.Row="2" DataContext="{Binding VanillaPackFileTree}"/>
         </Grid>
@@ -81,7 +67,7 @@
             </TabControl.Resources>
 
             <TabControl.ItemContainerStyle>
-                <Style TargetType="{x:Type TabItem}">
+                <Style BasedOn="{StaticResource TabItemTemplate}" TargetType="{x:Type TabItem}">
                     <EventSetter Event="UIElement.Drop" Handler="tabItem_Drop"/>
                     <EventSetter Event="UIElement.PreviewMouseMove" Handler="tabItem_MouseMove"/>
                     <EventSetter Event="UIElement.PreviewMouseDown" Handler="tabItem_MouseDown"/>
@@ -128,7 +114,7 @@
 
                         <TextBlock Grid.Column="0" Text="{Binding DisplayName.Value, UpdateSourceTrigger=PropertyChanged}">
                             <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlockTemplate}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding HasUnsavedChanges}" Value="True">
                                             <Setter Property="Foreground" Value="Red"/>

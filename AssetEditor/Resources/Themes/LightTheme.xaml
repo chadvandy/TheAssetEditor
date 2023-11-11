@@ -58,6 +58,18 @@
         </Setter>
     </Style>
 
+    <Style x:Key="OptionMarkFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true"
+                               Stroke="{StaticResource ControlDefaultForeground}"
+                               StrokeThickness="1" StrokeDashArray="1 2"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
 
     <!-- RepeatButton -->
@@ -435,18 +447,6 @@
                             <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="OptionMarkFocusVisual">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true"
-                               Stroke="{StaticResource ControlDefaultForeground}"
-                               StrokeThickness="1" StrokeDashArray="1 2"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -1223,7 +1223,7 @@
 
     <!-- Label -->
 
-    <Style TargetType="{x:Type Label}">
+    <Style TargetType="{x:Type Label}" x:Key="LabelTemplate">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Padding" Value="5"/>
@@ -1244,6 +1244,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelTemplate}"/>
 
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
 
@@ -1703,7 +1705,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type MenuItem}">
+    <Style TargetType="{x:Type MenuItem}" x:Key="MenuItemTemplate">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
@@ -1785,6 +1787,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItemTemplate}"/>
 
     <ControlTemplate x:Key="DropDownMenuItemStyle" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
@@ -3073,7 +3077,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type TabItem}">
+    <Style TargetType="{x:Type TabItem}" x:Key="TabItemTemplate">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}"/>
@@ -3259,6 +3263,9 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemTemplate}"/>
+    
     <!-- Alternative Styles -->
     <ControlTemplate x:Key="CloseButton" TargetType="{x:Type TabItem}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
@@ -3517,7 +3524,7 @@
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
 
     <!-- Textblock -->
-    <Style TargetType="{x:Type TextBlock}">
+    <Style TargetType="{x:Type TextBlock}" x:Key="TextBlockTemplate">
         <Setter Property="TextWrapping" Value="NoWrap"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         <Setter Property="TextAlignment" Value="Left"/>
@@ -3636,7 +3643,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlPrimaryMouseOverBackground}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlSelectedMouseOverBackground}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
                             <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlDefaultBackground}"/>
@@ -3668,7 +3675,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlPrimaryMouseOverBackground}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlSelectedMouseOverBackground}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
                             <Setter Property="Background" TargetName="Bd" Value="{StaticResource ControlDefaultBackground}"/>

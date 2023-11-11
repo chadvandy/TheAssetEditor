@@ -22,12 +22,12 @@
 
         <StackPanel x:Name="Header" Orientation="Horizontal">
 
-            <Label x:Name="PackFileHeader" Content="{Binding PackFileTypeHeader}" Width="100"/>
-            <Grid Height="20" Margin="0,0,0,0" Width="300" MinWidth="150">
+            <Label x:Name="PackFileHeader" Content="{Binding PackFileTypeHeader}" Width="100" Style="{StaticResource LabelTemplate}"/>
+            <Grid Height="20" Margin="0,0,0,0" Width="200" MinWidth="150" MaxWidth="225">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition MaxWidth="75" MinWidth="50"/>
+                    <ColumnDefinition MaxWidth="75" MinWidth="50"/>
+                    <ColumnDefinition MaxWidth="75" MinWidth="50"/>
                 </Grid.ColumnDefinitions>
                 <Button Content="Save"/>
                 <Button Content="Add" Grid.Column="1"/>

@@ -1276,7 +1276,7 @@
 
     <!-- Label -->
 
-    <Style TargetType="{x:Type Label}">
+    <Style TargetType="{x:Type Label}" x:Key="LabelTemplate">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Padding" Value="5"/>
@@ -1297,6 +1297,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelTemplate}"/>
 
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
 
